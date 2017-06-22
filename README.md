@@ -6,8 +6,7 @@ Input: A text file having one single word at each line.
 Output: Examples are as below,
 
 Example 1)
-$ ./randomWord 
-mauls
+$ ./randomWord                                                                                                                          mauls
 
 Example 2)
 $ ./randomWord 3
