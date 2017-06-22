@@ -25,6 +25,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 	"math/rand"
 	"time"
 )
@@ -49,8 +50,8 @@ func ReadFile(path string) []string {
 	return lines
 }
 
-// GenRandWords takes filepath and length as argument. It generates random words and returns the array.
-func GenRandWords(filePath string, ln int) []string {
+// GenRandWords takes filepath and number as argument. It generates and returns random words.
+func GenRandWords(filePath string, num int) []string {
 
 	// Read txt file.
 	wordDataSet := ReadFile(filePath)
@@ -60,31 +61,46 @@ func GenRandWords(filePath string, ln int) []string {
 	rand := rand.New(seed)
 	var words []string
 
-	if ln == 1 {
-		words = append(words, wordDataSet[rand.Intn(len(wordDataSet))])
-		return words
-	}
-	
-	for i := 0; i <= ln; i++ {
+	for i := 0; i < num; i++ {
 		words = append(words, wordDataSet[rand.Intn(len(wordDataSet))])
 	}
 	return words
+}
+
+// Usage prints the usage and exits the code.
+func Usage(){
+	usage := "\nUsage:\n" + os.Args[0] + " <Number to print words>\n\nExample: " + os.Args[0] + " 2\nOutput:\napple\ncar\n" 
+	fmt.Println("Please give Valid Input.\n", usage)
+	os.Exit(0)
+
 }
 
 //==========================================================================
 func main(){
 
 	filePath := "/home/yogesh/words_alpha.txt";
-	ln := len(os.Args) 
-	usage := "\nUsage:\n" + os.Args[0] + " <Number to print words>\n\nExample: " + os.Args[0] + " 2\nOutput:\napple\ncar\n" 
+	var words []string
+	ln := len(os.Args)
 
-	if ln > 2 {
-		fmt.Println("Please give Valid Input.\n", usage)
-		os.Exit(0)
-	} 
+	switch {
+	case ln > 2:
+		Usage()
 
-	// Generate Random Words from user input
-	words:=	GenRandWords(filePath, ln)
+	case ln == 2:
+
+		no, err := strconv.Atoi(os.Args[1])
+		if no <= 0 || err != nil {
+			Usage() //Non integer, Negative and 0 is an invalid input, exit
+		} else {
+			// Generate Random Words from user input
+			words = GenRandWords(filePath, no)
+		}
+		
+	case ln == 1:
+		
+			// Generate Random Words from user input
+			words = GenRandWords(filePath, ln)
+	}
 
 	// Print the Random Words
 	for _, word := range words {
